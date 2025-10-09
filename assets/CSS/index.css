@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+
+body {
+background: linear-gradient(145deg, #0f172a, #1e293b);
+color: #e2e8f0;
+margin: 0;
+font-family: 'Inter', sans-serif;
+}
+
+
+.topbar {
+background: rgba(255,255,255,0.05);
+padding: 1rem 2rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+
+.topbar .brand {
+font-weight: 700;
+font-size: 1.2rem;
+color: #facc15;
+}
+
+
+.topbar .user a {
+color: #38bdf8;
+text-decoration: none;
+}
+
+
+.topbar .user a:hover {
+text-decoration: underline;
+}
+
+
+.container {
+max-width: 900px;
+margin: 2rem auto;
+background: rgba(255,255,255,0.04);
+padding: 2rem;
+border-radius: 12px;
+box-shadow: 0 0 30px rgba(0,0,0,0.3);
+}
+
+
+h1 {
+color: #facc15;
+}
+
+
+.extra-info {
+color: #94a3b8;
+font-size: 0.95rem;
+}
+
+.dashboard-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}

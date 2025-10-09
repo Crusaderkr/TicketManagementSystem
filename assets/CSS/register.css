@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+body{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;    
+  height: 100vh;          
+
+}
+.card{
+background: rgba(45, 4, 248, 0.05);
+margin: auto;
+padding: 2rem;
+border-radius: 12px;
+width: 100%;
+max-width: 600px;
+box-shadow: 0 0 20px rgba(0,0,0,0.3);
+align-items: center;
+}
+
+
+h2 {
+text-align: center;
+color: #facc15;
+margin-bottom: 1.5rem;
+}
+
+
+label {
+display: block;
+margin-bottom: 1rem;
+}
+
+
+label span {
+display: block;
+font-size: 0.9rem;
+color: #a1a1aa;
+margin-bottom: 0.4rem;
+}
+
+
+input[type="text"], input[type="email"], input[type="password"] {
+width: 100%;
+padding: 10px;
+border: 1px solid #334155;
+background: transparent;
+color: #ff0000;
+border-radius: 8px;
+}
+
+
+button {
+width: 100%;
+background: #facc15;
+color: #0f172a;
+font-weight: 600;
+padding: 10px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+}
+
+
+button:hover {
+background: #fde047;
+}
+
+
+p {
+text-align: center;
+margin-top: 1rem;
+}
+
+
+a { color: #facc15; text-decoration: none; }
+a:hover { text-decoration: underline; }
