@@ -1,65 +1,131 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-
-
-.login-card {
-background: rgba(255, 255, 255, 0.06);
-padding: 2rem;
-border-radius: 12px;
-width: 100%;
-max-width: 380px;
-box-shadow: 0 0 25px rgba(0,0,0,0.4);
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --muted: #94a3b8;
+  --accent: #ffd700;
+  --accent2: #38bdf8;
 }
 
-
-h2 {
-text-align: center;
-color: #38bdf8;
-margin-bottom: 1rem;
+/* Base Body Styles for the Auth Page */
+.auth-page {
+  /* Match the dark gradient background */
+  background: linear-gradient(135deg, var(--bg), #071029);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', system-ui, Arial;
+  color: #e6eef8; /* Light text color */
 }
 
+/* Login/Register Card */
+.card {
+  background: var(--panel); /* Use the panel dark color */
+  padding: 2.5rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 380px;
+  /* Darker, subtle shadow */
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Subtle border */
+}
 
+/* Card Title */
+.card h2 {
+  text-align: center;
+  color: var(--accent2); /* Use the secondary accent color for headings */
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+/* Form Label Structure */
 label {
-display: block;
-margin-bottom: 1rem;
+  display: block;
+  margin-bottom: 1.2rem;
 }
-
 
 label span {
-display: block;
-color: #94a3b8;
-font-size: 0.9rem;
-margin-bottom: 0.4rem;
+  display: block;
+  color: var(--muted); /* Muted color for hints/labels */
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
 }
 
-
-input[type="email"], input[type="password"] {
-width: 100%;
-padding: 10px;
-border: 1px solid #334155;
-border-radius: 8px;
-background: transparent;
-color: #000000;
+/* Input Fields */
+input[type="text"], 
+input[type="email"], 
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  /* Light border on dark background */
+  border: 1px solid #334155; 
+  border-radius: 8px;
+  /* IMPORTANT: Change background to dark and text to light */
+  background: rgba(255, 255, 255, 0.03); 
+  color: #e6eef8; 
+  transition: border-color 0.2s, background 0.2s;
 }
 
-
-button {
-width: 100%;
-background: #38bdf8;
-color: #0f172a;
-border: none;
-padding: 10px;
-border-radius: 8px;
-cursor: pointer;
-font-weight: 600;
+input[type="text"]:focus, 
+input[type="email"]:focus, 
+input[type="password"]:focus {
+    outline: none;
+    border-color: var(--accent2);
+    background: rgba(255, 255, 255, 0.05);
 }
 
-
-button:hover {
-background: #7dd3fc;
+/* Form Submit Button */
+.btn {
+  width: 107%;
+  background: var(--accent); /* Use the primary yellow accent color */
+  color: #0f172a; /* Dark text for contrast on yellow */
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
 }
 
+.btn:hover {
+  background: #e5b800; /* Slightly darker yellow on hover */
+}
 
-p { text-align: center; margin-top: 1rem; }
-a { color: #38bdf8; }
-a:hover { text-decoration: underline; }
+/* Links and Muted Text */
+p.muted { 
+    text-align: center; 
+    margin-top: 1.5rem; 
+    color: var(--muted); 
+    font-size: 0.95rem;
+}
+
+p.muted a { 
+    color: var(--accent2); /* Blue accent for links */
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p.muted a:hover { 
+    text-decoration: underline; 
+}
+
+/* Error/Alert Message Styling */
+.alert {
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+.alert.error {
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    color: #ff9999;
+}
+.alert ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

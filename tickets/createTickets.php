@@ -49,10 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <form id="ticketForm" method="POST" action="">
       <label for="title">Ticket Title</label>
-      <input type="text" id="title" name="title" placeholder="Enter ticket title" required>
+      <input type="text" id="title" name="title" placeholder="Enter ticket title" maxlength="60" required>
 
       <label for="description">Problem Description</label>
-      <textarea id="description" name="description" rows="4" placeholder="Describe the issue..." required></textarea>
+      <textarea id="description" name="description" rows="4" placeholder="Describe the issue..." maxlength="800" required> </textarea>
 
       <label for="priority">Priority</label>
       <select id="priority" name="priority">
