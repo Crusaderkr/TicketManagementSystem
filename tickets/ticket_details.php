@@ -70,13 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
             $ins->close();
 
             // Send notification email to the new assignee
-            require_once '../utils/sendMail.php';
+            // require_once '../utils/sendMail.php';
 
-            if (sendAssignmentNotification($conn, $ticket_id)) {
-                $feedback = "Ticket reassigned and notification sent to " . htmlspecialchars($newUser['name']) . ".";
-            } else {
-                $feedback = "Ticket reassigned but failed to send notification email.";
-            }
+            // if (sendAssignmentNotification($conn, $ticket_id)) {
+            //     $feedback = "Ticket reassigned and notification sent to " . htmlspecialchars($newUser['name']) . ".";
+            // } else {
+            //     $feedback = "Ticket reassigned but failed to send notification email.";
+            // }
         } else {
             $feedback = "Failed to update assignment: " . $conn->error;
         }
@@ -164,7 +164,7 @@ $users_res = $conn->query("SELECT id, name FROM users ORDER BY name ASC");
 <body>
   <div class="topbar">
     <div class="brand">Ticket System</div>
-    <div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> — <a href="auth/logout.php">Logout</a></div>
+    <div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> — x  <a href="../auth/login.php">Logout</a></div>
   </div>
 
   <main class="ticket-page">

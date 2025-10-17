@@ -1,5 +1,6 @@
 <?php
-// Include PHPMailer classes (adjust paths if necessary)
+
+// Include PHPMailer classes
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -7,13 +8,38 @@ use PHPMailer\PHPMailer\Exception;
 require 'phpmailer/Exception.php';
 require 'phpmailer/PHPMailer.php';
 require 'phpmailer/SMTP.php';
-require_once '../config/db.php'; // Database connection and SMTP constants
 
 // Ensure your Brevo SMTP constants are defined in an included file:
 // define('SMTP_HOST', 'smtp-relay.sendinblue.com');
 // define('SMTP_USER', 'YOUR_BREVO_EMAIL_ADDRESS');
 // define('SMTP_PASS', 'YOUR_BREVO_API_KEY');
 // define('SMTP_PORT', 587);
+
+// Define the path to the .env file (assuming it's in the project root)
+$envFile = "../config/load.env";
+
+if (file_exists($envFile)) {
+    // Read the file line by line
+    $lines = file($envFile, FILE_IGNORE_EMPTY_LINES | FILE_SKIP_NEW_LINES);
+
+    foreach ($lines as $line) {
+        // Skip comments
+        if (strpos(trim($line), '#') === 0) {
+            continue;
+        }
+
+        // Split the line into key and value
+        list($key, $value) = explode('=', $line, 2);
+        
+        $key = trim($key);
+        $value = trim($value);
+
+        // Define the variable as a PHP constant if it's not already set
+        if (!defined($key)) {
+            define($key, $value);
+        }
+    }
+}
 
 
 /**
