@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ticket_id'])) {
     $ticket_id = intval($_POST['ticket_id']);
 
     // Restore the ticket
-    $stmt = $conn->prepare("UPDATE tickets SET is_deleted = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE tickets SET deleted_at = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
     $stmt->bind_param("i", $ticket_id);
 
     if ($stmt->execute()) {

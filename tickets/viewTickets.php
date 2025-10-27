@@ -20,7 +20,7 @@ if (!isset($conn) || $conn === null) {
 // ✅ Handle delete request (admin only)
 if ($user_role === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_ticket'])) {
     $ticket_id = intval($_POST['delete_ticket']);
-    $delete_stmt = $conn->prepare("UPDATE tickets SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
+    $delete_stmt = $conn->prepare("UPDATE tickets SET deleted_at = NOW(), updated_at = CURRENT_TIMESTAMP WHERE id = ?");
     $delete_stmt->bind_param("i", $ticket_id);
     $delete_stmt->execute();
     $delete_stmt->close();
@@ -45,7 +45,7 @@ if ($user_role === 'admin') {
         FROM tickets t
         JOIN users u ON t.created_by = u.id
         LEFT JOIN users a ON t.assigned_to = a.id
-        WHERE t.is_deleted = $show_deleted
+        WHERE " . ($show_deleted ? "t.deleted_at IS NOT NULL" : "t.deleted_at IS NULL") . "
         ORDER BY 
             FIELD(t.priority, 'High', 'Medium', 'Low'),
             t.created_at DESC
@@ -67,7 +67,7 @@ if ($user_role === 'admin') {
         JOIN users u ON t.created_by = u.id
         LEFT JOIN users a ON t.assigned_to = a.id
         WHERE (t.assigned_to = ? OR t.created_by = ?) 
-        AND t.is_deleted = 0
+        AND t.deleted_at IS NULL
         ORDER BY 
             FIELD(t.priority, 'High', 'Medium', 'Low'),
             t.created_at DESC
