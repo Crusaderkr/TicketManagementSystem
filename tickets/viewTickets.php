@@ -121,7 +121,25 @@ else {
 </head>
 <body>
   <div class="tickets-container">
-    <h1><?= $user_role === 'admin' ? (isset($_GET['show_deleted']) ? 'Deleted Tickets (Admin View)' : 'All Tickets (Admin View)') : 'My Tickets'; ?></h1>
+<h1>
+  <?php 
+    if ($user_role === 'admin') {
+        if (isset($_GET['show_deleted'])) {
+            echo "🗑 Deleted Tickets (Admin View)";
+        } elseif (isset($_GET['created_by_me'])) {
+            echo "🧾 Tickets Created by Me (Admin View)";
+        } else {
+            echo "📋 All Tickets (Admin View)";
+        }
+    } else {
+        if (isset($_GET['created_by_me'])) {
+            echo "🧾 Tickets Created by Me";
+        } else {
+            echo "📋 Tickets Assigned to Me";
+        }
+    }
+  ?>
+</h1>
 
 
     <?php if (isset($_GET['deleted'])): ?>

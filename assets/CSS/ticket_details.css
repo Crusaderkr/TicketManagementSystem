@@ -170,7 +170,19 @@ body {
   resize: vertical;
   min-height: 80px;
 }
-
+.logout_button{
+  display: inline-block;
+  background: var(--accent2); 
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(56, 189, 248, 0.25);
+}
 .btn {
   /* General button styling */
   background: var(--accent);
@@ -235,7 +247,10 @@ body {
 .history-body {
   margin-top: 8px;
   color: #cfe9ff;
-  white-space: pre-wrap; /* Preserve formatting for comments */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .muted {
@@ -254,7 +269,8 @@ body {
   /* Ensure the summary occupies the main (left) column */
   .ticket-summary {
     grid-column: 1 / 2;
-    margin-bottom: 0; /* No bottom margin needed in the grid */
+    margin-bottom: 0;
+     /* No bottom margin needed in the grid */
   }
   
   /* Container for the right column content (Update and History) */
@@ -269,6 +285,9 @@ body {
   .ticket-actions {
     margin-top: 0;
     margin-bottom: 0;
+  }
+  .ticket-card{
+    word-break: break-all;
   }
   
   /* Fix the meta list to display horizontally on desktop as typically intended */
