@@ -1,11 +1,7 @@
 <?php
+require "env.php";
 
-$servername= 'localhost:3308';
-$username= 'root';
-$password= '';
-$dbname= 'ticket_system';
-
-$conn= new mysqli($servername, $username, $password, $dbname);
+$conn= new mysqli(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if($conn->connect_error){
     die("Connection failed: " . $conn->connect_error);
 }

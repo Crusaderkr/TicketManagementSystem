@@ -1,0 +1,286 @@
+/* ticket_details.css - simple clean layout with fixes for two-column structure */
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --muted: #94a3b8;
+  --accent: #ffd700;
+  --accent2: #38bdf8;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: Inter, system-ui, Arial;
+  /* Dark blue background with a subtle gradient */
+  background: linear-gradient(135deg, var(--bg), #071029);
+  color: #e6eef8;
+  line-height: 1.6;
+}
+
+/* --- Top Bar --- */
+.topbar {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* --- Page Structure --- */
+.ticket-page {
+  max-width: 1200px; /* Increased max-width for better two-column spacing */
+  margin: 28px auto;
+  padding: 0 16px;
+  /* Base layout for mobile (single column) is handled implicitly */
+}
+
+.back {
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: none;
+  margin-bottom: 18px; /* Increased margin for better separation */
+  font-size: 0.95rem;
+}
+
+.feedback {
+  background: rgba(0, 255, 0, 0.06); /* Changed from white to a green tint for success feedback */
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px 0;
+  color: #d1ffd6;
+  border: 1px solid rgba(0, 255, 0, 0.1);
+}
+
+/* --- Ticket Summary (Left Panel) --- */
+.ticket-summary {
+  background: var(--panel);
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+  margin-bottom: 20px; /* Spacing for mobile layout */
+}
+
+.ticket-summary h1 {
+  margin: 0 0 8px;
+  color: var(--accent); /* Yellow color for the ticket title */
+  font-size: 1.8rem;
+}
+
+.ticket-summary .desc {
+  color: #cbd5e1;
+  margin: 8px 0;
+   word-break: break-word; 
+  /* Also use the newer standard property for better compatibility */
+  overflow-wrap: break-word;
+}
+
+.meta {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  flex-direction: column; /* Stack details vertically on mobile */
+  gap: 6px;
+}
+
+.meta li {
+  color: var(--muted);
+  font-size: 0.95rem;
+  /* Removed padding-right: 8px as it's not needed for stacking */
+}
+
+/* --- Update/Action Form (Right Panel) --- */
+.update-section h2, 
+.ticket-history h2 {
+  margin: 0 0 15px;
+  font-size: 1.5rem;
+  color: #e6eef8;
+}
+
+.ticket-actions {
+  /* This container holds the Status/Priority/Reassign form */
+  padding: 18px;
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+  margin-bottom: 20px;
+}
+
+/* Update section form layout */
+.form-inline {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 15px; /* Spacing below the status/priority row */
+}
+
+.form-inline label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1; /* Allow fields to grow */
+  min-width: 140px; /* Ensure fields have enough space */
+}
+
+.form-group label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+.form-group label span {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.form-inline select,
+.form-inline input[type="text"],
+.comment-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(212, 26, 26, 0.03);
+  color: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.form-inline select:focus,
+.form-inline input[type="text"]:focus,
+.comment-form textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent2);
+}
+
+.comment-form {
+    margin-top: 15px;
+}
+
+.comment-form textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.btn {
+  /* General button styling */
+  background: var(--accent);
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+  width: 100%; /* Full width button in sidebar */
+}
+
+.btn:hover {
+    background: #e5b800;
+}
+
+.btn.alt {
+  background: var(--accent2);
+  color: #000;
+}
+
+.btn.alt:hover {
+    background: #1c90e0;
+}
+
+/* --- Ticket History --- */
+.ticket-history {
+  margin-top: 18px;
+}
+
+.history-item {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.history-head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.history-head .atype {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.history-head .ts {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.history-body {
+  margin-top: 8px;
+  color: #cfe9ff;
+  white-space: pre-wrap; /* Preserve formatting for comments */
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* --- Desktop Layout (Two Columns) --- */
+@media (min-width: 900px) {
+  .ticket-page {
+    display: grid;
+    /* Create a 1fr (main content) and 360px (sidebar) column layout */
+    grid-template-columns: 1fr 360px;
+    gap: 25px; /* Increased gap for better visual separation */
+  }
+
+  /* Ensure the summary occupies the main (left) column */
+  .ticket-summary {
+    grid-column: 1 / 2;
+    margin-bottom: 0; /* No bottom margin needed in the grid */
+  }
+  
+  /* Container for the right column content (Update and History) */
+  .right-sidebar {
+    grid-column: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  
+  /* Place the actions/update form and history in the right column */
+  .ticket-actions {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  /* Fix the meta list to display horizontally on desktop as typically intended */
+  .meta {
+    flex-direction: row;
+    gap: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 10px;
+  }
+  
+  /* Make sure the form elements are styled well in the tight space */
+  .form-inline label {
+      flex: 1 1 0%; /* Ensure both status and priority take half the space */
+  }
+}

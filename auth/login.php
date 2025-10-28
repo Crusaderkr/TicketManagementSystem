@@ -16,7 +16,7 @@ if ($password === '') $errors[] = 'Password is required.';
 
 
 if (empty($errors)) {
-$stmt = $conn->prepare('SELECT id, name, password FROM users WHERE email = ? LIMIT 1');
+$stmt = $conn->prepare('SELECT id, name, password, role FROM users WHERE email = ? LIMIT 1');
 $stmt->bind_param('s', $email);
 $stmt->execute();
 $res = $stmt->get_result();
@@ -27,6 +27,7 @@ if (password_verify($password, $user['password'])) {
 // success: set session
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['user_name'] = $user['name'];
+$_SESSION['role'] = $user['role']; 
 header('Location: ../index.php');
 exit;
 } else {
@@ -50,7 +51,7 @@ $stmt->close();
 <body>
 <main class="auth-page">
 <div class="card">
-<h2>Welcome back</h2>
+<h2>Welcome</h2>
 
 
 <?php if (!empty($_GET['registered'])): ?>
@@ -89,8 +90,5 @@ $stmt->close();
 <p class="muted">Don't have an account? <a href="register.php">Register</a></p>
 </div>
 </main>
-
-
-<script src="../assets/script.js"></script>
 </body>
 </html>

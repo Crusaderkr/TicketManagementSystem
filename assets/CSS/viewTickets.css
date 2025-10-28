@@ -32,6 +32,11 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  word-wrap: break-word;       /* Break long words onto the next line */
+  overflow-wrap: break-word;   /* Modern version, ensures wrapping */
+  white-space: normal;         /* Prevents text from staying in one line */
+  max-width: 100%;             
+  
 }
 
 .ticket-header {
@@ -115,4 +120,93 @@ h1 {
   text-align: center;
   color: #888;
   font-style: italic;
+}
+
+.delete-btn{
+  margin-top: 15px;
+  background: #cc0303;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+}
+
+.delete-btn:hover{
+  margin-top: 15px;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+}
+
+.ticket-grid {
+  display: grid;
+  gap: 1rem;
+  overflow-x: hidden;
+}
+/* ===== Admin Control Buttons (View Deleted / Active Tickets) ===== */
+
+.controls {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.controls .btn {
+  display: inline-block;
+  background: var(--accent2); /* Soft blue button */
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(56, 189, 248, 0.25);
+}
+
+.controls .btn:hover {
+  background: #0ea5e9; /* Brighter blue */
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35);
+}
+
+
+.restore-btn {
+  width: 100%;
+  background: #22c55e; /* Green restore color */
+  color: #fff;
+  font-weight: 600;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+.restore-btn:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.35);
+}
+
+
+
+
+
+@media (max-width: 600px) {
+  .ticket-card {
+    padding: 15px;
+  }
+
+  .open-btn, .delete-btn {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
 }

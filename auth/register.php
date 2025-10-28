@@ -14,8 +14,17 @@ $password_confirm = $_POST['password_confirm'] ?? '';
 
 
 if ($name === '') $errors[] = 'Name is required.';
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid email is required.';
-if (strlen($password) < 6) $errors[] = 'Password must be at least 6 characters.';
+$email_regex = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+
+if (!preg_match($email_regex, $email)) {
+    $errors[] = 'The email address is not in a valid format.';
+}
+
+$password_regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/'; 
+
+if (!preg_match($password_regex, $password)) {
+    $errors[] = 'Password must be at least 8 characters long and include uppercase, lowercase, a number, and a symbol.';
+}
 if ($password !== $password_confirm) $errors[] = 'Passwords do not match.';
 
 if (empty($errors)) {
@@ -72,25 +81,25 @@ $errors[] = 'Database error: ' . $conn->error;
 <form method="post" id="registerForm" novalidate>
 <label>
 <span>Name</span>
-<input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" required>
+<input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" maxlength="60" required>
 </label>
 
 
 <label>
 <span>Email</span>
-<input type="email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
+<input type="email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" maxlength="150" required>
 </label>
 
 
-<label class="password-row">
+<label class="password-row" maxlength="60">
 <span>Password</span>
-<input type="password" name="password" id="password" required>
+<input type="password" name="password" id="password" maxlength="60" required>
 </label>
 
 
 <label class="password-row">
 <span>Confirm Password</span>
-<input type="password" name="password_confirm" id="password_confirm" required>
+<input type="password" name="password_confirm" id="password_confirm" maxlength="60" required>
 </label>
 
 
@@ -101,8 +110,5 @@ $errors[] = 'Database error: ' . $conn->error;
 <p class="muted">Already have an account? <a href="login.php">Login</a></p>
 </div>
 </main>
-
-
-<script src="../assets/script.js"></script>
 </body>
 </html>
