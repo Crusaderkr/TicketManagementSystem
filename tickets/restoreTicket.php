@@ -4,7 +4,7 @@ session_start();
 
 // Ensure only admins can access this action
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit;
 }
 

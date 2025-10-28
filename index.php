@@ -22,7 +22,7 @@ exit;
 <main class="home-page">
 <div class="topbar">
 <div class="brand">Ticket System</div>
-<div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> — <a href="./auth/register.php">Logout</a></div>
+<div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> — <a href="./auth/login.php">Logout</a></div>
 </div>
 
 

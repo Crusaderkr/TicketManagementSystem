@@ -1,6 +1,7 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+    
 }
 
 require_once __DIR__ . '/../config/db.php';
@@ -30,7 +31,7 @@ if ($user_role === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
 
 // ✅ Fetch tickets based on role
 if ($user_role === 'admin') {
-    $show_deleted = isset($_GET['show_deleted']) ? 1 : 0;
+    $show_deleted = (isset($_GET['show_deleted']) && $_GET['show_deleted'] == 1) ? 1 : 0;
     $query = "
         SELECT 
             t.id, 
@@ -51,7 +52,38 @@ if ($user_role === 'admin') {
             t.created_at DESC
     ";
     $result = $conn->query($query);
-} else {
+}
+
+elseif (isset($_GET['created_by_me'])) {
+    // ✅ Show only tickets created by the user
+    $query = "
+        SELECT 
+            t.id, 
+            t.title, 
+            t.description, 
+            t.status, 
+            t.priority, 
+            t.created_at,
+            t.assigned_to, 
+            a.name AS assigned_to_name,
+            u.name AS created_by_name
+        FROM tickets t
+        JOIN users u ON t.created_by = u.id
+        LEFT JOIN users a ON t.assigned_to = a.id
+        WHERE t.created_by = ? 
+        AND t.deleted_at IS NULL
+        ORDER BY 
+            FIELD(t.priority, 'High', 'Medium', 'Low'),
+            t.created_at DESC
+    ";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $current_user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+}
+
+else {
+    // ✅ Default view: tickets assigned to or created by user
     $query = "
         SELECT 
             t.id, 
@@ -100,7 +132,7 @@ if ($user_role === 'admin') {
 
     <!-- ✅ Admin Toggle Buttons -->
     <?php if ($user_role === 'admin'): ?>
-      <div class="admin-controls" style="text-align:center; margin-bottom:15px;">
+      <div class="controls">
         <?php if (isset($_GET['show_deleted'])): ?>
           <a href="viewTickets.php" class="btn">🔙 View Active Tickets</a>
         <?php else: ?>
@@ -108,6 +140,16 @@ if ($user_role === 'admin') {
         <?php endif; ?>
       </div>
     <?php endif; ?>
+
+    <?php if ($user_role !== 'admin'): ?>
+  <div class="controls">
+    <?php if (isset($_GET['created_by_me'])): ?>
+      <a href="viewTickets.php" class="btn">🔙 View Assigned Tickets</a>
+    <?php else: ?>
+      <a href="viewTickets.php?created_by_me=1" class="btn">🧾 View Tickets Created by Me</a>
+    <?php endif; ?>
+  </div>
+<?php endif; ?>
 
     <!-- ✅ Tickets Grid -->
     <div class="ticket-grid">

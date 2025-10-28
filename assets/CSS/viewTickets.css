@@ -150,7 +150,12 @@ h1 {
   overflow-x: hidden;
 }
 /* ===== Admin Control Buttons (View Deleted / Active Tickets) ===== */
-.admin-controls .btn {
+
+.controls {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.controls .btn {
   display: inline-block;
   background: var(--accent2); /* Soft blue button */
   color: #fff;
@@ -164,7 +169,7 @@ h1 {
   box-shadow: 0 4px 10px rgba(56, 189, 248, 0.25);
 }
 
-.admin-controls .btn:hover {
+.controls .btn:hover {
   background: #0ea5e9; /* Brighter blue */
   transform: translateY(-1px);
   box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35);
