@@ -20,13 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->bind_param("sssi", $title, $description, $priority, $created_by);
 
         if ($stmt->execute()) {
-            $message = "✅ Ticket created successfully!";
+            $message = " Ticket created successfully!";
         } else {
-            $message = "❌ Error creating ticket.";
+            $message = " Error creating ticket.";
         }
         $stmt->close();
     } else {
-        $message = "⚠️ Please fill in all fields.";
+        $message = " Please fill in all fields.";
     }
 }
 ?>

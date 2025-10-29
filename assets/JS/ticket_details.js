@@ -1,6 +1,4 @@
-// assets/JS/ticket_details.js
 
-// ✅ Confirm before reassigning a ticket
 function confirmReassign() {
   const select = document.querySelector('select[name="reassign_to"]');
   const name = select.options[select.selectedIndex].text;
@@ -13,7 +11,7 @@ function confirmReassign() {
   return confirm(`Are you sure you want to reassign this ticket to ${name}?`);
 }
 
-// ✅ Validate comment before submitting
+
 function validateComment() {
   const textarea = document.getElementById("comment_text");
   const text = textarea.value.trim();
@@ -26,8 +24,6 @@ function validateComment() {
 
   return true;
 }
-
-// ✅ Auto-hide feedback messages after a few seconds
 document.addEventListener("DOMContentLoaded", () => {
   const feedback = document.querySelector(".feedback");
   if (feedback) {

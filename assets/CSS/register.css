@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* Define Theme Variables for consistency */
+
 :root {
   --bg: #0f172a;
   --panel: #111827;
   --muted: #ffffff;
-  --accent: #ffd700; /* Primary Yellow Accent */
-  --accent2: #38bdf8; /* Secondary Blue Accent */
+  --accent: #ffd700; 
+  --accent2: #38bdf8; 
   --text-light: #e6eef8;
   --error: #f87171;
 }
 
-/* Base Body Styles */
+
 body {
   background: linear-gradient(135deg, var(--bg), #071029);
   font-family: 'Inter', system-ui, Arial;
@@ -20,17 +20,17 @@ body {
   padding: 0;
 }
 
-/* Single container handles centering */
+
 .auth-page {
   display: flex;
-  justify-content: center;   /* Center horizontally */
-  align-items: center;       /* Center vertically */
-  height: 100vh;             /* Full viewport height (not min-height) */
+  justify-content: center;   
+  align-items: center;      
+  height: 100vh;            
   width: 100%;
   padding: 16px;
 }
 
-/* Card Styles */
+
 .card {
   background: var(--panel);
   padding: 45px;

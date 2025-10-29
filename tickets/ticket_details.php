@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 require "../config/db.php";
 
 $user_id = $_SESSION['user_id'];
-$user_role = $_SESSION['role'] ?? 'user'; // default to 'user' if not set
+$user_role = $_SESSION['role'] ?? 'user'; 
 $current_user_id = $user_id;
 
 $ticket_id = intval($_GET['id'] ?? 0);
@@ -20,7 +20,7 @@ if ($ticket_id <= 0) {
     die("Invalid ticket ID.");
 }
 
-// Fetch the ticket BEFORE checking access
+
 $stmt = $conn->prepare("
     SELECT t.*, 
            u1.name AS created_by_name, 
@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
             $ins->execute();
             $ins->close();
         } elseif (!empty($manual_comment)) {
-            // only comment, no field changes
+            
             $ins = $conn->prepare("INSERT INTO ticket_comments (ticket_id, user_id, comment, action_type) VALUES (?, ?, ?, 'Comment')");
             $ins->bind_param("iis", $ticket_id, $current_user_id, $manual_comment);
             if ($ins->execute()) {

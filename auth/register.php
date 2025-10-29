@@ -28,7 +28,7 @@ if (!preg_match($password_regex, $password)) {
 if ($password !== $password_confirm) $errors[] = 'Passwords do not match.';
 
 if (empty($errors)) {
-// check if email exists
+
 $stmt = $conn->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
 $stmt->bind_param('s', $email);
 $stmt->execute();
