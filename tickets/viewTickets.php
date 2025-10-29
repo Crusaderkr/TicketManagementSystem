@@ -1,7 +1,7 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
-    
+    session_regenerate_id(true);
 }
 
 require_once __DIR__ . '/../config/db.php';
@@ -29,33 +29,9 @@ if ($user_role === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
     exit();
 }
 
-// ✅ Fetch tickets based on role
-if ($user_role === 'admin') {
-    $show_deleted = (isset($_GET['show_deleted']) && $_GET['show_deleted'] == 1) ? 1 : 0;
-    $query = "
-        SELECT 
-            t.id, 
-            t.title, 
-            t.description, 
-            t.status, 
-            t.priority, 
-            t.created_at, 
-            t.assigned_to,
-            u.name AS created_by_name,
-            a.name AS assigned_to_name
-        FROM tickets t
-        JOIN users u ON t.created_by = u.id
-        LEFT JOIN users a ON t.assigned_to = a.id
-        WHERE " . ($show_deleted ? "t.deleted_at IS NOT NULL" : "t.deleted_at IS NULL") . "
-        ORDER BY 
-            FIELD(t.priority, 'High', 'Medium', 'Low'),
-            t.created_at DESC
-    ";
-    $result = $conn->query($query);
-}
 
-elseif (isset($_GET['created_by_me'])) {
-    // ✅ Show only tickets created by the user
+if (isset($_GET['created_by_me'])) {
+ 
     $query = "
         SELECT 
             t.id, 
@@ -82,8 +58,32 @@ elseif (isset($_GET['created_by_me'])) {
     $result = $stmt->get_result();
 }
 
+elseif ($user_role === 'admin') {
+    $show_deleted = (isset($_GET['show_deleted']) && $_GET['show_deleted'] == 1) ? 1 : 0;
+    $query = "
+        SELECT 
+            t.id, 
+            t.title, 
+            t.description, 
+            t.status, 
+            t.priority, 
+            t.created_at, 
+            t.assigned_to,
+            u.name AS created_by_name,
+            a.name AS assigned_to_name
+        FROM tickets t
+        JOIN users u ON t.created_by = u.id
+        LEFT JOIN users a ON t.assigned_to = a.id
+        WHERE " . ($show_deleted ? "t.deleted_at IS NOT NULL" : "t.deleted_at IS NULL") . "
+        ORDER BY 
+            FIELD(t.priority, 'High', 'Medium', 'Low'),
+            t.created_at DESC
+    ";
+    $result = $conn->query($query);
+}
+
 else {
-    // ✅ Default view: tickets assigned to or created by user
+    
     $query = "
         SELECT 
             t.id, 
@@ -121,27 +121,50 @@ else {
 </head>
 <body>
   <div class="tickets-container">
-    <h1><?= $user_role === 'admin' ? (isset($_GET['show_deleted']) ? 'Deleted Tickets (Admin View)' : 'All Tickets (Admin View)') : 'My Tickets'; ?></h1>
+<h1>
+  <?php 
+    if ($user_role === 'admin') {
+        if (isset($_GET['show_deleted'])) {
+            echo "🗑 Deleted Tickets (Admin View)";
+        } elseif (isset($_GET['created_by_me'])) {
+            echo "🧾 Tickets Created by Me (Admin View)";
+        } else {
+            echo "📋 All Tickets (Admin View)";
+        }
+    } else {
+        if (isset($_GET['created_by_me'])) {
+            echo "🧾 Tickets Created by Me";
+        } else {
+            echo "📋 Tickets Assigned to Me";
+        }
+    }
+  ?>
+</h1>
 
-    <!-- ✅ Feedback Messages -->
+
     <?php if (isset($_GET['deleted'])): ?>
       <p style="color: green; text-align:center;">✅ Ticket deleted successfully!</p>
     <?php elseif (isset($_GET['restored'])): ?>
       <p style="color: green; text-align:center;">♻ Ticket restored successfully!</p>
     <?php endif; ?>
 
-    <!-- ✅ Admin Toggle Buttons -->
-    <?php if ($user_role === 'admin'): ?>
-      <div class="controls">
-        <?php if (isset($_GET['show_deleted'])): ?>
-          <a href="viewTickets.php" class="btn">🔙 View Active Tickets</a>
-        <?php else: ?>
-          <a href="viewTickets.php?show_deleted=1" class="btn">🗑 View Deleted Tickets</a>
-        <?php endif; ?>
-      </div>
+   <?php if ($user_role === 'admin'): ?>
+  <div class="controls">
+    <?php if (isset($_GET['show_deleted'])): ?>
+    
+      <a href="viewTickets.php" class="btn">🔙 View Active Tickets</a>
+    <?php elseif (isset($_GET['created_by_me'])): ?>
+      
+      <a href="viewTickets.php" class="btn">🔙 View All Tickets</a>
+      <a href="viewTickets.php?show_deleted=1" class="btn">🗑 View Deleted Tickets</a>
+    <?php else: ?>
+   
+      <a href="viewTickets.php?created_by_me=1" class="btn">🧾 View Tickets Created by Me</a>
+      <a href="viewTickets.php?show_deleted=1" class="btn">🗑 View Deleted Tickets</a>
     <?php endif; ?>
+  </div>
 
-    <?php if ($user_role !== 'admin'): ?>
+<?php else: ?>
   <div class="controls">
     <?php if (isset($_GET['created_by_me'])): ?>
       <a href="viewTickets.php" class="btn">🔙 View Assigned Tickets</a>
@@ -151,7 +174,7 @@ else {
   </div>
 <?php endif; ?>
 
-    <!-- ✅ Tickets Grid -->
+   
     <div class="ticket-grid">
       <?php if ($result && $result->num_rows > 0): ?>
         <?php while ($row = $result->fetch_assoc()): ?>
@@ -174,7 +197,6 @@ else {
 
             <button class="open-btn" onclick="openTicket(<?= $row['id']; ?>)">Open Ticket</button>
 
-            <!-- ✅ Admin-only Delete or Restore Buttons -->
             <?php if ($user_role === 'admin'): ?>
               <?php if (isset($_GET['show_deleted'])): ?>
                 <form action="restoreTicket.php" method="post" onsubmit="return confirm('Restore this ticket?')">

@@ -44,14 +44,28 @@ h1 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  word-break: break-all;
+  padding-right: 100px;
+  position: relative; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  word-break: break-all;
 }
 
 .priority-badge {
+  position: absolute;
+  top: 20px;
+  right: 10px;
   padding: 5px 10px;
   border-radius: 6px;
   font-weight: 600;
   color: #fff;
   font-size: 0.85rem;
+  transform: translateY(-50%);
+  
+
 }
 
 .priority-badge.high {

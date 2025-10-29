@@ -164,7 +164,7 @@ $users_res = $conn->query("SELECT id, name FROM users ORDER BY name ASC");
 <body>
   <div class="topbar">
     <div class="brand">Ticket System</div>
-    <div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> — x  <a href="../auth/login.php">Logout</a></div>
+    <div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> <a class=logout_button href="../auth/login.php">Logout</a></div>
   </div>
 
   <main class="ticket-page">
