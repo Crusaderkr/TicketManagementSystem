@@ -1,8 +1,10 @@
 <?php
 session_start();
 require_once __DIR__ . '/../config/db.php';
-
-
+if (isset($_SESSION['user_id'])) {
+    header('Location: ../index.php');
+    exit;
+}
 $errors = [];
 
 
@@ -51,6 +53,7 @@ $stmt->close();
 </head>
 <body>
 <main class="auth-page">
+        <h1>Ticket Management System</h1>
 <div class="card">
 <h2>Welcome</h2>
 

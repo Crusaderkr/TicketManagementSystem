@@ -18,7 +18,7 @@ if (!isset($conn) || $conn === null) {
     die("Database connection not established.");
 }
 
-//  Handle delete request 
+
 if ($user_role === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_ticket'])) {
     $ticket_id = intval($_POST['delete_ticket']);
     $delete_stmt = $conn->prepare("UPDATE tickets SET deleted_at = NOW(), updated_at = CURRENT_TIMESTAMP WHERE id = ?");

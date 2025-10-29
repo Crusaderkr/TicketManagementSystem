@@ -2,22 +2,18 @@
 
 
 body {
-background: linear-gradient(145deg, #0f172a, #1e293b);
+ background-color: #121212;
 color: #e2e8f0;
 margin: 0;
 font-family: 'Inter', sans-serif;
 }
-
-
-
-
 .container {
 max-width: 900px;
 margin: 8rem auto;
 background: rgba(255,255,255,0.04);
 padding: 4rem;
 border-radius: 12px;
-box-shadow: 0 0 30px rgba(0,0,0,0.3);
+box-shadow: 0 0 4px rgba(174, 172, 172, 0.3);
 }
 
 

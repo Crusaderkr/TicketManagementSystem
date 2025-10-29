@@ -64,6 +64,7 @@ $errors[] = 'Database error: ' . $conn->error;
 </head>
 <body>
 <main class="auth-page">
+<h1>Ticket Management System</h1>
 <div class="card">
 <h2>Create account</h2>
 

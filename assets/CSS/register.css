@@ -2,18 +2,18 @@
 
 
 :root {
-  --bg: #0f172a;
-  --panel: #111827;
-  --muted: #ffffff;
-  --accent: #ffd700; 
-  --accent2: #38bdf8; 
+   --bg: #121212;
+  --panel: rgba(255,255,255,0.04);
+  --muted: #94a3b8;
+  --accent: #007bff;
+  --accent2: #38bdf8;
   --text-light: #e6eef8;
   --error: #f87171;
 }
 
 
 body {
-  background: linear-gradient(135deg, var(--bg), #071029);
+  background:var(--bg);
   font-family: 'Inter', system-ui, Arial;
   color: var(--text-light);
   margin: 0;
@@ -30,15 +30,28 @@ body {
   padding: 16px;
 }
 
+h1 {
+    position: absolute;
+    align-self: center;
+    top: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: auto;
+}
 
+h1:hover{
+   color: var(--accent2);
+  }
+
+  
 .card {
   background: var(--panel);
   padding: 45px;
   border-radius: 12px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.982);
+  box-shadow: 0 0px 4px rgba(255, 255, 255, 0.9);
+
   text-align: left;
 }
 
@@ -100,7 +113,7 @@ input[type="password"]:focus {
 }
 
 .btn:hover {
-  background: #e5b800;
+  background: #06e1f1;
    transform: scale(1.08);
   transition: background 0.3s ease, transform 0.3s ease; 
   color: white;

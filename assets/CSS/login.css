@@ -1,46 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 :root {
-  --bg: #0f172a;
-  --panel: #111827;
+  --bg: #121212;
+  --panel: rgba(255,255,255,0.04);
   --muted: #94a3b8;
-  --accent: #ffd700;
+  --accent: #007bff;
   --accent2: #38bdf8;
 }
 
-/* Base Body Styles for the Auth Page */
+body{
+   background :var(--bg);
+}
+
 .auth-page {
-  /* Match the dark gradient background */
-  background: linear-gradient(135deg, var(--bg), #071029);
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Inter', system-ui, Arial;
-  color: #e6eef8; /* Light text color */
+  color: #e6eef8; 
 }
+h1 {
+    position: absolute;
+    align-self: center;
+    top: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: auto;
+}
+h1:hover{
+   color: var(--accent2);
+  }
 
-/* Login/Register Card */
 .card {
-  background: var(--panel); /* Use the panel dark color */
+  background: var(--panel); 
   padding: 2.5rem;
   border-radius: 12px;
   width: 100%;
   max-width: 380px;
-  /* Darker, subtle shadow */
-  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.05); /* Subtle border */
+box-shadow: 0 0 4px rgba(174, 172, 172, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05); 
 }
 
-/* Card Title */
 .card h2 {
   text-align: center;
-  color: var(--accent2); /* Use the secondary accent color for headings */
+  color: var(--accent2);
   margin-bottom: 1.5rem;
   font-weight: 700;
 }
 
-/* Form Label Structure */
+
 label {
   display: block;
   margin-bottom: 1.2rem;
@@ -48,21 +57,18 @@ label {
 
 label span {
   display: block;
-  color: var(--muted); /* Muted color for hints/labels */
-  font-size: 0.9rem;
+  color: var(--muted); 
   margin-bottom: 0.4rem;
 }
 
-/* Input Fields */
+
 input[type="text"], 
 input[type="email"], 
 input[type="password"] {
   width: 100%;
   padding: 12px;
-  /* Light border on dark background */
   border: 1px solid #334155; 
   border-radius: 8px;
-  /* IMPORTANT: Change background to dark and text to light */
   background: rgba(255, 255, 255, 0.03); 
   color: #e6eef8; 
   transition: border-color 0.2s, background 0.2s;
@@ -76,11 +82,10 @@ input[type="password"]:focus {
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* Form Submit Button */
 .btn {
   width: 107%;
-  background: var(--accent); /* Use the primary yellow accent color */
-  color: #0f172a; /* Dark text for contrast on yellow */
+  background: var(--accent); 
+  color: #0f172a; 
   border: none;
   padding: 12px;
   border-radius: 8px;
@@ -91,10 +96,9 @@ input[type="password"]:focus {
 }
 
 .btn:hover {
-  background: #e5b800; /* Slightly darker yellow on hover */
+  background: #06e1f1; 
 }
 
-/* Links and Muted Text */
 p.muted { 
     text-align: center; 
     margin-top: 1.5rem; 
@@ -103,7 +107,7 @@ p.muted {
 }
 
 p.muted a { 
-    color: var(--accent2); /* Blue accent for links */
+    color: var(--accent2); 
     text-decoration: none;
     font-weight: 600;
 }
@@ -112,7 +116,7 @@ p.muted a:hover {
     text-decoration: underline; 
 }
 
-/* Error/Alert Message Styling */
+
 .alert {
     padding: 10px 15px;
     border-radius: 8px;

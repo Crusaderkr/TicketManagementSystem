@@ -1,5 +1,5 @@
 :root {
-  --bg: #0f172a;
+  --bg: #121212;
   --panel: #111827;
   --muted: #94a3b8;
   --accent: #ffffff;
@@ -16,24 +16,12 @@ body {
   line-height: 1.6;
 }
 
-.topbar {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-}
-
-.brand {
-  font-weight: 700;
-  color: var(--accent);
-}
-
 .ticket-page {
   max-width: 1200px;
   margin: 28px auto;
   padding: 0 16px;
+    background: linear-gradient(135deg, var(--bg), #071029);
+
 }
 
 .back {
@@ -272,5 +260,8 @@ body {
 
   .form-inline label {
     flex: 1 1 0%;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 }
