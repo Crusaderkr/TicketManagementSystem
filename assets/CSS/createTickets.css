@@ -3,32 +3,26 @@ body {
     background-color: #121212;
     color: #eee;
     min-height: 100vh;
-    
-    /* FIX: Remove default browser margins for flush fit */
     margin: 0; 
     padding: 0; 
 }
 
 .ticket-container {
-    background: #1f1f1f;
+    background: rgba(255,255,255,0.04);
     padding: 2rem 3rem;
     border-radius: 15px;
     width: 400px;
-    box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
-    
-    /* FIX: Set margin explicitly for top spacing and horizontal centering */
-    margin-top: 50px; /* Gap from the navbar */
-    margin-bottom: 50px; /* Gap below the form */
+    box-shadow: 0 0 15px rgba(0, 94, 255, 0.3);
+    margin-top: 50px;
+    margin-bottom: 50px; 
     margin-left: auto; 
     margin-right: auto;
-    
-    /* Keeping text overflow fix from before, which is good practice */
     word-break: break-word; 
 }
 
 h2 {
     text-align: center;
-    color: #ffd700;
+    color: #007bff;
     margin-bottom: 1.5rem;
 }
 
@@ -46,7 +40,6 @@ input, textarea, select {
     border-radius: 8px;
     background: #2c2c2c;
     color: white;
-    /* Keeps text overflow fix */
     word-break: break-word; 
 }
 
@@ -54,7 +47,7 @@ button {
     width: 100%;
     margin-top: 1.5rem;
     padding: 0.8rem;
-    background: #ffd700;
+    background: #007bff;
     color: #000;
     border: none;
     border-radius: 10px;
@@ -63,7 +56,9 @@ button {
 }
 
 button:hover {
-    background: #ffea00;
+    background: #0ea5e9;
+    box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35);
+
 }
 
 .message {
@@ -75,10 +70,11 @@ button:hover {
     display: block;
     text-align: center;
     margin-top: 1rem;
-    color: #ffd700;
+    color: #007bff;
     text-decoration: none;
 }
 
 .back-link:hover {
     text-decoration: underline;
+    color: #0ea5e9;
 }

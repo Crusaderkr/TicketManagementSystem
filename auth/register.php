@@ -56,6 +56,7 @@ $errors[] = 'Database error: ' . $conn->error;
 ?>
 <!doctype html>
 <head>
+<link rel="icon" type="image/png" href="../assets/images/favicon.jpg">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Register — Ticket System</title>

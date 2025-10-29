@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #1e1e2f;
+  background:   rgba(255,255,255,0.05);
   color: #fff;
   padding: 1rem 2rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);      
@@ -16,7 +16,7 @@ flex-wrap: nowrap;
 }
 
 .topbar .brand-link {
-  color: #ffd700;
+  color: #fcfcfc;
   text-decoration: none;
   font-weight: 600;
   font-size: 1.2rem;
@@ -34,4 +34,13 @@ flex-wrap: nowrap;
 
 .topbar .logout-link:hover {
   text-decoration: none;
+  color: #ff0000;
+}
+.topbar .brand-link:hover {
+ color: #0ea5e9;
+ transform: scale(1.2);
+ transition: transform 0.5s ease-in-out;
+
+
+
 }

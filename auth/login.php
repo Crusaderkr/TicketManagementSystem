@@ -43,6 +43,7 @@ $stmt->close();
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="icon" type="image/png" href="../assets/images/favicon.jpg">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Login — Ticket System</title>

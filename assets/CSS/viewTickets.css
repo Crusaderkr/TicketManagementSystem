@@ -14,7 +14,7 @@ body {
 
 h1 {
   text-align: center;
-  color: #ffd700;
+  color: #ffffff;
   margin-bottom: 30px;
 }
 
@@ -32,11 +32,10 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  word-wrap: break-word;       /* Break long words onto the next line */
-  overflow-wrap: break-word;   /* Modern version, ensures wrapping */
-  white-space: normal;         /* Prevents text from staying in one line */
+  word-wrap: break-word;       
+  overflow-wrap: break-word; 
+  white-space: normal;         
   max-width: 100%;             
-  
 }
 
 .ticket-header {
@@ -105,7 +104,7 @@ h1 {
 
 .open-btn {
   margin-top: 15px;
-  background: #ffd700;
+  background: #007bff;
   border: none;
   border-radius: 8px;
   padding: 10px;
@@ -115,19 +114,20 @@ h1 {
 }
 
 .open-btn:hover {
-  background: #ffea00;
+  background: #0ea5e9;
 }
 
 .back-link {
   display: block;
   text-align: center;
   margin-top: 30px;
-  color: #ffd700;
+  color: #ffffff;
   text-decoration: none;
 }
 
 .back-link:hover {
   text-decoration: underline;
+  color:#1c90e0;
 }
 
 .no-tickets {
@@ -163,7 +163,7 @@ h1 {
   gap: 1rem;
   overflow-x: hidden;
 }
-/* ===== Admin Control Buttons (View Deleted / Active Tickets) ===== */
+
 
 .controls {
   text-align: center;
@@ -171,7 +171,7 @@ h1 {
 }
 .controls .btn {
   display: inline-block;
-  background: var(--accent2); /* Soft blue button */
+  background: var(--accent2);
   color: #fff;
   font-weight: 600;
   padding: 10px 18px;
@@ -184,7 +184,7 @@ h1 {
 }
 
 .controls .btn:hover {
-  background: #0ea5e9; /* Brighter blue */
+  background: #0ea5e9;
   transform: translateY(-1px);
   box-shadow: 0 6px 15px rgba(56, 189, 248, 0.35);
 }
