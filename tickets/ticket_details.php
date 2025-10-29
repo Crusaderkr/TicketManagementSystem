@@ -162,6 +162,7 @@ $users_res = $conn->query("SELECT id, name FROM users ORDER BY name ASC");
   <link rel="stylesheet" href="../assets/CSS/ticket_details.css">
 </head>
 <body>
+  <?php include '../includes/navbar.php'; ?>
   <div class="topbar">
     <div class="brand">Ticket System</div>
     <div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> <a class=logout_button href="../auth/login.php">Logout</a></div>

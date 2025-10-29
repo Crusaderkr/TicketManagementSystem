@@ -1,0 +1,37 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e1e2f;
+  color: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);      
+ width: 100%; 
+ top: 0; 
+ left: 0; 
+ z-index: 1000;
+ box-sizing: border-box; 
+ min-width: 320px;       
+flex-wrap: nowrap;      
+}
+
+.topbar .brand-link {
+  color: #ffd700;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.topbar .user {
+  font-size: 1rem;
+}
+
+.topbar .logout-link {
+  color: #ff5555;
+  margin-left: 8px;
+  text-decoration: none;
+}
+
+.topbar .logout-link:hover {
+  text-decoration: none;
+}

@@ -40,6 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <link rel="stylesheet" href="../assets/CSS/createTickets.css">
 </head>
 <body>
+<?php include '../includes/navbar.php'; ?>
+
   <div class="ticket-container">
     <h2>Create New Ticket</h2>
     

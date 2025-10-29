@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_regenerate_id(true);
 }
 
-require_once __DIR__ . '/../config/db.php';
+require "../config/db.php";
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../auth/login.php");
@@ -18,7 +18,7 @@ if (!isset($conn) || $conn === null) {
     die("Database connection not established.");
 }
 
-// ✅ Handle delete request (admin only)
+//  Handle delete request 
 if ($user_role === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_ticket'])) {
     $ticket_id = intval($_POST['delete_ticket']);
     $delete_stmt = $conn->prepare("UPDATE tickets SET deleted_at = NOW(), updated_at = CURRENT_TIMESTAMP WHERE id = ?");
@@ -120,22 +120,23 @@ else {
   <link rel="stylesheet" href="../assets/CSS/viewTickets.css">
 </head>
 <body>
+  <?php include '../includes/navbar.php'; ?>
   <div class="tickets-container">
 <h1>
   <?php 
     if ($user_role === 'admin') {
         if (isset($_GET['show_deleted'])) {
-            echo "🗑 Deleted Tickets (Admin View)";
+            echo "Deleted Tickets (Admin View)";
         } elseif (isset($_GET['created_by_me'])) {
-            echo "🧾 Tickets Created by Me (Admin View)";
+            echo "Tickets Created by Me (Admin View)";
         } else {
-            echo "📋 All Tickets (Admin View)";
+            echo " All Tickets (Admin View)";
         }
     } else {
         if (isset($_GET['created_by_me'])) {
-            echo "🧾 Tickets Created by Me";
+            echo " Tickets Created by Me";
         } else {
-            echo "📋 Tickets Assigned to Me";
+            echo " Tickets Assigned to Me";
         }
     }
   ?>
@@ -159,7 +160,7 @@ else {
       <a href="viewTickets.php?show_deleted=1" class="btn">🗑 View Deleted Tickets</a>
     <?php else: ?>
    
-      <a href="viewTickets.php?created_by_me=1" class="btn">🧾 View Tickets Created by Me</a>
+      <a href="viewTickets.php?created_by_me=1" class="btn"> View Tickets Created by Me</a>
       <a href="viewTickets.php?show_deleted=1" class="btn">🗑 View Deleted Tickets</a>
     <?php endif; ?>
   </div>
@@ -169,7 +170,7 @@ else {
     <?php if (isset($_GET['created_by_me'])): ?>
       <a href="viewTickets.php" class="btn">🔙 View Assigned Tickets</a>
     <?php else: ?>
-      <a href="viewTickets.php?created_by_me=1" class="btn">🧾 View Tickets Created by Me</a>
+      <a href="viewTickets.php?created_by_me=1" class="btn"> View Tickets Created by Me</a>
     <?php endif; ?>
   </div>
 <?php endif; ?>

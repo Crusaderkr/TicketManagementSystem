@@ -24,12 +24,8 @@ exit;
 <link rel="stylesheet" href="assets/CSS/index.css">
 </head>
 <body>
+<?php include './includes/navbar.php'; ?>
 <main class="home-page">
-<div class="topbar">
-<div class="brand">Ticket System</div>
-<div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> — <a href="./auth/login.php">Logout</a></div>
-</div>
-
 
 <section class="container">
 <h1>Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?></h1>
