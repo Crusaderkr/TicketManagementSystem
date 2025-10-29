@@ -1,93 +1,247 @@
 <?php
-session_start();
-require_once "../config/db.php" ;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    session_regenerate_id(true);
+}
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: auth/login.php');
-    exit;
+    header("Location: ../auth/login.php");
+    exit();
 }
 
-$current_user_id = $_SESSION['user_id'];
+require "../config/db.php";
 
-// Get ticket id
-if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
-    echo "Ticket ID missing or invalid.";
-    exit;
+$user_id = $_SESSION['user_id'];
+$user_role = $_SESSION['role'] ?? 'user'; 
+$current_user_id = $user_id;
+
+$ticket_id = intval($_GET['id'] ?? 0);
+if ($ticket_id <= 0) {
+    die("Invalid ticket ID.");
 }
-$ticket_id = intval($_GET['id']);
+
+
+$stmt = $conn->prepare("
+    SELECT t.*, 
+           u1.name AS created_by_name, 
+           u2.name AS assigned_to_name
+    FROM tickets t
+    LEFT JOIN users u1 ON t.created_by = u1.id
+    LEFT JOIN users u2 ON t.assigned_to = u2.id
+    WHERE t.id = ?
+    LIMIT 1
+");
+$stmt->bind_param("i", $ticket_id);
+$stmt->execute();
+$ticket = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+if (!$ticket) {
+    die("Ticket not found.");
+}
+
+
+if ($user_role !== 'admin') {
+    
+    if (empty($ticket['assigned_to']) || $ticket['assigned_to'] === null) {
+        if ($ticket['created_by'] != $user_id) {
+            die("Unauthorized access. This unassigned ticket is not yours.");
+        }
+    } 
+   
+    else {
+        if ($ticket['created_by'] != $user_id && $ticket['assigned_to'] != $user_id) {
+            die("Unauthorized access. You do not have permission to view this ticket.");
+        }
+    }
+}
 
 $feedback = '';
 
-// Handle POST actions: update (status/priority), reassign, comment
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
     $action = $_POST['action'];
 
-    if ($action === 'update') {
-        // Update status and priority
-        $status = $_POST['status'] ?? 'Open';
-        $priority = $_POST['priority'] ?? 'Low';
+    
+    $tstmt = $conn->prepare("
+        SELECT t.* 
+        FROM tickets t
+        WHERE t.id = ? LIMIT 1
+    ");
+    $tstmt->bind_param("i", $ticket_id);
+    $tstmt->execute();
+    $tres = $tstmt->get_result();
+    $ticket = $tres->fetch_assoc();
+    $tstmt->close();
 
-        $stmt = $conn->prepare("UPDATE tickets SET status = ?, priority = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
-        $stmt->bind_param("ssi", $status, $priority, $ticket_id);
-        if ($stmt->execute()) {
-            $feedback = "Status and priority updated.";
-        } else {
-            $feedback = "Error updating ticket: " . $conn->error;
-        }
-        $stmt->close();
+    if (!$ticket) {
+        $feedback = "Ticket not found.";
+        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        exit;
     }
 
-    elseif ($action === 'reassign') {
-    // Reassign to another user (expects user_id)
-    $new_user_id = intval($_POST['reassign_to'] ?? 0);
-    $reassign_comment = trim($_POST['reassign_comment'] ?? '');
+    if ($action === 'update') {
+       
+        $new_status     = isset($_POST['status']) ? trim($_POST['status']) : '';
+        $new_priority   = isset($_POST['priority']) ? trim($_POST['priority']) : '';
+        $new_assigned_to = null;
 
-    // check user exists
-    $u = $conn->prepare("SELECT id, name FROM users WHERE id = ? LIMIT 1");
-    $u->bind_param("i", $new_user_id);
-    $u->execute();
-    $resU = $u->get_result();
+        if (isset($_POST['assigned_to'])) {
+            $new_assigned_to = trim($_POST['assigned_to']);
+        } elseif (isset($_POST['reassign_to'])) {
+            $new_assigned_to = trim($_POST['reassign_to']);
+        }
+        $manual_comment = trim($_POST['comment_text'] ?? $_POST['reassign_comment'] ?? $_POST['comment'] ?? '');
 
-    if ($resU && $resU->num_rows) {
-        $newUser = $resU->fetch_assoc();
+        $updates = [];      
+        $summary = [];     
 
-        // update ticket assigned_to
-        $up = $conn->prepare("UPDATE tickets SET assigned_to = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
-        $up->bind_param("ii", $new_user_id, $ticket_id);
-        if ($up->execute()) {
+        
+        if ($new_status !== '' && $new_status !== $ticket['status']) {
+            $updates['status'] = $new_status;
+            $summary[] = "Status => {$new_status}";
+        }
 
-            // add a ticket_comments row for reassign action
-            $comment_text = $reassign_comment;
-            if ($comment_text === '') {
-                $comment_text = "Reassigned to " . $newUser['name'];
-            } else {
-                $comment_text = "Reassigned to " . $newUser['name'] . " — " . $comment_text;
+        if ($new_priority !== '' && $new_priority !== $ticket['priority']) {
+            $updates['priority'] = $new_priority;
+            $summary[] = "Priority => {$new_priority}";
+        }
+
+      
+        if ($new_assigned_to !== null && $new_assigned_to !== '') {
+            $new_assigned_to_int = intval($new_assigned_to);
+            if ($new_assigned_to_int != $ticket['assigned_to']) {
+                
+                $u = $conn->prepare("SELECT id, name FROM users WHERE id = ? LIMIT 1");
+                $u->bind_param("i", $new_assigned_to_int);
+                $u->execute();
+                $ures = $u->get_result();
+                if ($ures && $ures->num_rows) {
+                    $targetUser = $ures->fetch_assoc();
+                    $updates['assigned_to'] = $new_assigned_to_int;
+                    $noteText = !empty($_POST['reassign_comment']) ? ' — Note: ' . htmlspecialchars(trim($_POST['reassign_comment'])) : '';
+                  $summary[] = "Reassigned to {$targetUser['name']}{$noteText}";
+                } else {
+                    $feedback = "Selected user for reassignment does not exist.";
+                    $u->close();
+                    
+                    header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+                    exit;
+                }
+                
+                $u->close();
+            }
+        }
+
+        
+        if (!empty($updates)) {
+            
+            $setParts = [];
+            $types = '';
+            $values = [];
+
+            foreach ($updates as $col => $val) {
+                $setParts[] = "$col = ?";
+                
+                if ($col === 'assigned_to') {
+                    $types .= 'i';
+                    $values[] = $val;
+                } else {
+                    $types .= 's';
+                    $values[] = $val;
+                }
             }
 
-            $ins = $conn->prepare("INSERT INTO ticket_comments (ticket_id, user_id, comment, action_type) VALUES (?, ?, ?, 'Reassign')");
-            $ins->bind_param("iis", $ticket_id, $current_user_id, $comment_text);
+         
+            $query = "UPDATE tickets SET " . implode(', ', $setParts) . ", updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+            $types .= 'i';
+            $values[] = $ticket_id;
+
+            $stmt = $conn->prepare($query);
+            if ($stmt === false) {
+                $feedback = "Prepare failed: " . htmlspecialchars($conn->error);
+            } else {
+             
+                $bind_names = [];
+                $bind_names[] = &$types;
+                for ($i = 0; $i < count($values); $i++) {
+                    $bind_names[] = &$values[$i];
+                }
+                call_user_func_array([$stmt, 'bind_param'], $bind_names);
+
+                if ($stmt->execute()) {
+                    $feedback = "Ticket updated successfully.";
+                } else {
+                    $feedback = "Error updating ticket: " . $conn->error;
+                }
+                $stmt->close();
+            }
+        }
+
+        
+        if (!empty($summary)) {
+            $autoComment = implode(", ", $summary);
+            $fullComment = $manual_comment ? ($autoComment . " — " . $manual_comment) : $autoComment;
+
+            $ins = $conn->prepare("INSERT INTO ticket_comments (ticket_id, user_id, comment, action_type) VALUES (?, ?, ?, 'Update')");
+            $ins->bind_param("iis", $ticket_id, $current_user_id, $fullComment);
             $ins->execute();
             $ins->close();
-
-            // Send notification email to the new assignee
-            // require_once '../utils/sendMail.php';
-
-            // if (sendAssignmentNotification($conn, $ticket_id)) {
-            //     $feedback = "Ticket reassigned and notification sent to " . htmlspecialchars($newUser['name']) . ".";
-            // } else {
-            //     $feedback = "Ticket reassigned but failed to send notification email.";
-            // }
+        } elseif (!empty($manual_comment)) {
+            
+            $ins = $conn->prepare("INSERT INTO ticket_comments (ticket_id, user_id, comment, action_type) VALUES (?, ?, ?, 'Comment')");
+            $ins->bind_param("iis", $ticket_id, $current_user_id, $manual_comment);
+            if ($ins->execute()) {
+                $feedback = "Comment added.";
+            } else {
+                $feedback = "Failed to add comment: " . $conn->error;
+            }
+            $ins->close();
         } else {
-            $feedback = "Failed to update assignment: " . $conn->error;
+           
+            if ($feedback === '') {
+                $feedback = "No changes detected.";
+            }
         }
-        $up->close();
 
-    } else {
-        $feedback = "Selected user does not exist.";
+       
+        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        exit;
     }
-    $u->close();
-}
 
+
+    elseif ($action === 'reassign') {
+        
+        $new_user_id = intval($_POST['reassign_to'] ?? 0);
+        $reassign_comment = trim($_POST['reassign_comment'] ?? '');
+
+        $u = $conn->prepare("SELECT id, name FROM users WHERE id = ? LIMIT 1");
+        $u->bind_param("i", $new_user_id);
+        $u->execute();
+        $resU = $u->get_result();
+        if ($resU && $resU->num_rows) {
+            $newUser = $resU->fetch_assoc();
+            $up = $conn->prepare("UPDATE tickets SET assigned_to = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
+            $up->bind_param("ii", $new_user_id, $ticket_id);
+            if ($up->execute()) {
+                $comment_text = $reassign_comment === '' ? "Reassigned to " . $newUser['name'] : "Reassigned to " . $newUser['name'] . " — " . $reassign_comment;
+                $ins = $conn->prepare("INSERT INTO ticket_comments (ticket_id, user_id, comment, action_type) VALUES (?, ?, ?, 'Reassign')");
+                $ins->bind_param("iis", $ticket_id, $current_user_id, $comment_text);
+                $ins->execute();
+                $ins->close();
+                $feedback = "Ticket reassigned to " . htmlspecialchars($newUser['name']) . ".";
+            } else {
+                $feedback = "Failed to update assignment: " . $conn->error;
+            }
+            $up->close();
+        } else {
+            $feedback = "Selected user does not exist.";
+        }
+        $u->close();
+
+        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        exit;
+    }
 
     elseif ($action === 'comment') {
         $comment_text = trim($_POST['comment_text'] ?? '');
@@ -103,19 +257,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
         } else {
             $feedback = "Comment cannot be empty.";
         }
-    }
 
-    // after post, redirect to avoid form resubmission (PRG pattern)
-    header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
-    exit;
+        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        exit;
+    }
 }
 
-// Show feedback from redirect
+
+
 if (!empty($_GET['msg'])) {
     $feedback = $_GET['msg'];
 }
 
-// Fetch ticket details
+
 $stmt = $conn->prepare("
     SELECT t.*, 
            u1.name AS created_by_name, 
@@ -136,7 +290,7 @@ if (!$ticket) {
     exit;
 }
 
-// Fetch comment/history
+
 $com = $conn->prepare("
     SELECT c.*, u.name AS user_name
     FROM ticket_comments c
@@ -149,24 +303,22 @@ $com->execute();
 $comments = $com->get_result();
 $com->close();
 
-// Fetch list of users for reassign dropdown
+
 $users_res = $conn->query("SELECT id, name FROM users ORDER BY name ASC");
 ?>
 
 <!doctype html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" href="../assets/images/favicon.jpg">
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Ticket — <?= htmlspecialchars($ticket['title']) ?></title>
   <link rel="stylesheet" href="../assets/CSS/ticket_details.css">
 </head>
 <body>
-  <div class="topbar">
-    <div class="brand">Ticket System</div>
-    <div class="user">Hello, <?= htmlspecialchars($_SESSION['user_name']) ?> <a class=logout_button href="../auth/login.php">Logout</a></div>
-  </div>
-
+ <?php include "../includes/navbar.php"?>
   <main class="ticket-page">
     <a class="back" href="../tickets/viewTickets.php">⬅ Back to Tickets</a>
 
@@ -188,63 +340,66 @@ $users_res = $conn->query("SELECT id, name FROM users ORDER BY name ASC");
     </section>
 
     <section class="ticket-actions">
-      <h2>Update</h2>
+  <h2>Update Ticket</h2>
 
-      <!-- Update status/priority -->
-      <form method="post" class="form-inline">
-        <input type="hidden" name="action" value="update">
-        <label>
-          Status
-          <select class="drop-down" name="status" style="background-color: #1f2c49ff";>
-            <option value="Open" <?= $ticket['status'] === 'Open' ? 'selected' : '' ?>>Open</option>
-            <option value="In Progress" <?= $ticket['status'] === 'In Progress' ? 'selected' : '' ?>>In Progress</option>
-            <option value="Resolved" <?= $ticket['status'] === 'Resolved' ? 'selected' : '' ?>>Resolved</option>
-          </select>
-        </label>
+  <form method="post" class="form-inline" onsubmit="return validateUpdateForm()">
+    <input type="hidden" name="action" value="update">
 
-        <label>
-          Priority
-          <select class="drop-down" name="priority" style="background-color: #1f2c49ff;">
-            <option value="Low" <?= $ticket['priority'] === 'Low' ? 'selected' : '' ?>>Low</option>
-            <option value="Medium" <?= $ticket['priority'] === 'Medium' ? 'selected' : '' ?>>Medium</option>
-            <option value="High" <?= $ticket['priority'] === 'High' ? 'selected' : '' ?>>High</option>
-          </select>
-        </label>
+    
+    <label>
+      Status
+      <select class="drop-down" name="status" style="background-color: #1f2c49ff;">
+        <option value="">-- Keep Same --</option>
+        <option value="Open" <?= $ticket['status'] === 'Open' ? 'selected' : '' ?>>Open</option>
+        <option value="In Progress" <?= $ticket['status'] === 'In Progress' ? 'selected' : '' ?>>In Progress</option>
+        <option value="Resolved" <?= $ticket['status'] === 'Resolved' ? 'selected' : '' ?>>Resolved</option>
+      </select>
+    </label>
 
-        <button type="submit" class="btn">Save</button>
-      </form>
+    
+    <label>
+      Priority
+      <select class="drop-down" name="priority" style="background-color: #1f2c49ff;">
+        <option value="">-- Keep Same --</option>
+        <option value="Low" <?= $ticket['priority'] === 'Low' ? 'selected' : '' ?>>Low</option>
+        <option value="Medium" <?= $ticket['priority'] === 'Medium' ? 'selected' : '' ?>>Medium</option>
+        <option value="High" <?= $ticket['priority'] === 'High' ? 'selected' : '' ?>>High</option>
+      </select>
+    </label>
 
-      <!-- Reassign -->
-      <form method="post" class="form-inline" onsubmit="return confirmReassign()">
-        <input type="hidden" name="action" value="reassign">
-        <label>
-          Reassign to
-          <select class="drop-down" name="reassign_to" required style="background-color: #1f2c49ff;">
-            <option value="">-- Select user --</option>
-            <?php while ($u = $users_res->fetch_assoc()): ?>
-              <option value="<?= $u['id'] ?>" <?= ($ticket['assigned_to'] == $u['id']) ? 'selected' : '' ?>><?= htmlspecialchars($u['name']) ?></option>
-            <?php endwhile; ?>
-          </select>
-        </label>
+    
+    <label>
+      Reassign to
+      <select class="drop-down" name="reassign_to" style="background-color: #1f2c49ff;">
+        <option value="">-- Keep Same --</option>
+        <?php
+        $users_res->data_seek(0); 
+        while ($u = $users_res->fetch_assoc()): ?>
+          <option value="<?= $u['id'] ?>" <?= ($ticket['assigned_to'] == $u['id']) ? 'selected' : '' ?>>
+            <?= htmlspecialchars($u['name']) ?>
+          </option>
+        <?php endwhile; ?>
+      </select>
+    </label>
 
-        <label>
-          Note (optional)
-          <input type="text" name="reassign_comment" placeholder="Add a note about reassignment" maxlength="200">
-        </label>
+  
+    <label>
+      Note (optional)
+      <input type="text" name="reassign_comment" placeholder="Add a note about reassignment" maxlength="200">
+      
+    </label>
 
-        <button type="submit" class="btn alt">Reassign</button>
-      </form>
+    
+    <label style="display:block;width:100%;margin-top:10px;">
+      Add Comment
+      <textarea name="comment_text" id="comment_text" rows="4" placeholder="Write your comment..." maxlength="500" style="width:100%;"></textarea>
+    </label>
 
-      <!-- Add comment -->
-      <form method="post" class="comment-form" onsubmit="return validateComment()">
-        <input type="hidden" name="action" value="comment">
-        <label>
-          Add Comment
-          <textarea name="comment_text" id="comment_text" rows="4" placeholder="Write your comment..." maxlength="500"></textarea>
-        </label>
-        <button type="submit" class="btn">Add Comment</button>
-      </form>
-    </section>
+    
+    <button type="submit" class="btn">Update Ticket</button>
+  </form>
+</section>
+
 
     <section class="ticket-history">
       <h2>History & Comments</h2>

@@ -20,13 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->bind_param("sssi", $title, $description, $priority, $created_by);
 
         if ($stmt->execute()) {
-            $message = "✅ Ticket created successfully!";
+            $message = " Ticket created successfully!";
         } else {
-            $message = "❌ Error creating ticket.";
+            $message = " Error creating ticket.";
         }
         $stmt->close();
     } else {
-        $message = "⚠️ Please fill in all fields.";
+        $message = " Please fill in all fields.";
     }
 }
 ?>
@@ -34,12 +34,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" href="../assets/images/favicon.jpg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Ticket</title>
   <link rel="stylesheet" href="../assets/CSS/createTickets.css">
 </head>
 <body>
+<?php include '../includes/navbar.php'; ?>
+
   <div class="ticket-container">
     <h2>Create New Ticket</h2>
     

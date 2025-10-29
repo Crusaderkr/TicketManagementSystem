@@ -9,46 +9,20 @@ font-family: 'Inter', sans-serif;
 }
 
 
-.topbar {
-background: rgba(255,255,255,0.05);
-padding: 1rem 2rem;
-display: flex;
-justify-content: space-between;
-align-items: center;
-border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-
-.topbar .brand {
-font-weight: 700;
-font-size: 1.2rem;
-color: #facc15;
-}
-
-
-.topbar .user a {
-color: #38bdf8;
-text-decoration: none;
-}
-
-
-.topbar .user a:hover {
-text-decoration: underline;
-}
 
 
 .container {
 max-width: 900px;
-margin: 2rem auto;
+margin: 8rem auto;
 background: rgba(255,255,255,0.04);
-padding: 2rem;
+padding: 4rem;
 border-radius: 12px;
 box-shadow: 0 0 30px rgba(0,0,0,0.3);
 }
 
 
 h1 {
-color: #facc15;
+color: #ffffff;
 }
 
 
@@ -64,7 +38,19 @@ font-size: 0.95rem;
   justify-content: center;
 }
 
-.btn {
+.btn1 {
+  background-color:#0056b3 ;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn1:hover {
+  background-color:#007bff;
+}
+.btn2 {
   background-color: #007bff;
   color: white;
   padding: 12px 24px;
@@ -73,6 +59,7 @@ font-size: 0.95rem;
   transition: background 0.3s ease;
 }
 
-.btn:hover {
+.btn2:hover {
   background-color: #0056b3;
 }
+
