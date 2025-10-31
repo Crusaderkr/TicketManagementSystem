@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
-<link rel="stylesheet" href="/assets/CSS/navbar.css">
+<link rel="stylesheet" href="../assets/CSS/navbar.css">
 <span class="topbar">
   <div class="brand">
     <a href="/index.php" class="brand-link">Ticket System</a>
