@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ticket_id'])) {
     }
 
     $stmt->close();
-    header("Location: ../viewtickets.php");
+    header("Location: ../tickets/viewTickets.php");
     exit;
 } else {
     $_SESSION['message'] = "Invalid request.";
