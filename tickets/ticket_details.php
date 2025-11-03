@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 
     if (!$ticket) {
         $feedback = "Ticket not found.";
-        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: /TicketManagementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
                     $feedback = "Selected user for reassignment does not exist.";
                     $u->close();
                     
-                    header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+                    header("Location: /TicketManagementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
                     exit;
                 }
                 
@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
         }
 
        
-        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: /TicketManagementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 
@@ -239,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
         }
         $u->close();
 
-        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: /TicketManagementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 
@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
             $feedback = "Comment cannot be empty.";
         }
 
-        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: /TicketManagementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 }
