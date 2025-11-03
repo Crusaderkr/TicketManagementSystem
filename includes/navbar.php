@@ -10,6 +10,6 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
   <div class="user">
     Hello, <?= htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?> —
-    <a href="/TicketManagementSystem/auth/login.php" class="logout-link">Logout</a>
+    <a href="/TicketManagementSystem/auth/logout.php" class="logout-link">Logout</a>
   </div>
 </span>

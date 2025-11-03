@@ -14,6 +14,6 @@ header("Pragma: no-cache");
 header("Expires: 0");
 
 
-header("Location: login.php");
+header("Location: /TicketManagementSystem/auth/login.php");
 exit;
 ?>
