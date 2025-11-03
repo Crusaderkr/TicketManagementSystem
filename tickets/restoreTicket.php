@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ticket_id'])) {
         $_SESSION['message'] = " Ticket restored successfully.";
     } else {
         $_SESSION['message'] = "Failed to restore ticket: " . $conn->error;
-    }
+    } -
 
     $stmt->close();
     header("Location: ../tickets/viewTickets.php");

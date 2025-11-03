@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 
     if (!$ticket) {
         $feedback = "Ticket not found.";
-        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
                     $feedback = "Selected user for reassignment does not exist.";
                     $u->close();
                     
-                    header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+                    header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
                     exit;
                 }
                 
@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
         }
 
        
-        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 
@@ -239,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
         }
         $u->close();
 
-        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 
@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
             $feedback = "Comment cannot be empty.";
         }
 
-        header("Location: ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
+        header("Location: TicketMangementSystem/tickets/ticket_details.php?id={$ticket_id}&msg=" . urlencode($feedback));
         exit;
     }
 }
@@ -342,7 +342,7 @@ $users_res = $conn->query("SELECT id, name FROM users ORDER BY name ASC");
     <section class="ticket-actions">
   <h2>Update Ticket</h2>
 
-  <form method="post" class="form-inline" onsubmit="return validateUpdateForm()">
+  <form method="post" class="form-inline">
     <input type="hidden" name="action" value="update">
 
     
